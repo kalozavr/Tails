@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+  <Project Path="src/Tails.API/Tails.API.csproj" Id="02cd1dbd-47d2-4582-b05f-8afeb30db585" />
+  <Project Path="src/Tails.Application/Tails.Application.csproj" Id="7211728d-f871-4a3b-a01e-4bc4a345af6e" />
+  <Project Path="src/Tails.Domain/Tails.Domain.csproj" Id="62791372-86f6-41c0-9cb7-20fc43e503f9" />
+  <Project Path="src/Tails.Infrastructure/Tails.Infrastructure.csproj" Id="ee57214e-1756-4260-98b8-97327324262a" />
+</Solution>
