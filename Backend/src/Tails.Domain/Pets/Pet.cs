@@ -11,12 +11,14 @@ namespace Tails.Domain.Pets
         // EF Core
         private Pet() { }
 
+        public const int MaxNameLength = 100;
+        public const int MaxDescriptionLength = 2000;
         private readonly List<Requisite> _requisites = [];
 
         // Required
         public string Name { get; private set; }
         public SpeciesBreed SpeciesBreed { get; private set; }
-        public string OwnerPhoneNumber { get; private set; }
+        public PhoneNumber OwnerPhoneNumber { get; private set; }
 
         // Default values
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
@@ -26,7 +28,7 @@ namespace Tails.Domain.Pets
         public string Description { get; private set; } = string.Empty;
         public string Color { get; private set; } = string.Empty;
         public string HealthInfo { get; private set; } = string.Empty;
-        public string Address { get; private set; } = string.Empty;
+        public Address Address { get; private set; }
         public double Weight { get; private set; } = default;
         public double Height { get; private set; } = default;
         public bool IsNeutered { get; private set; } = default;
@@ -34,20 +36,20 @@ namespace Tails.Domain.Pets
         public bool IsVaccinated { get; private set; } = default;
         public IReadOnlyList<Requisite> Requisites => _requisites;
 
-        private Pet(Guid id, string name, SpeciesBreed speciesBreed, string ownerPhoneNumber)
+        private Pet(Guid id, string name, SpeciesBreed speciesBreed, PhoneNumber ownerPhoneNumber, Address address)
         : base(id)
         {
             Name = name;
             SpeciesBreed = speciesBreed;
             OwnerPhoneNumber = ownerPhoneNumber;
+            Address = address;
         }
 
-        public static Result<Pet, Error> Create(
-        Guid id, string name, SpeciesBreed speciesBreed, string ownerPhoneNumber)
+        public static Result<Pet, Error> Create(Guid id, string name, SpeciesBreed speciesBreed, PhoneNumber ownerPhoneNumber, Address address)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name) || name.Trim().Length > MaxNameLength)
             {
-                return new Error("pet.name.empty", "Pet name cannot be empty");
+                return new Error("pet.name.invalid", $"Pet name is required (max {MaxNameLength} characters)");
             }
 
             if (speciesBreed is null)
@@ -55,12 +57,17 @@ namespace Tails.Domain.Pets
                 return new Error("pet.speciesbreed.null", "Species and breed must be specified");
             }
 
-            if (string.IsNullOrWhiteSpace(ownerPhoneNumber))
+            if (ownerPhoneNumber is null)
             {
-                return new Error("pet.phone.empty", "Owner phone number cannot be empty");
+                return new Error("pet.phone.null", "Owner phone number must be specified");
             }
 
-            return new Pet(id, name.Trim(), speciesBreed, ownerPhoneNumber.Trim());
+            if (address is null)
+            {
+                return new Error("pet.address.null", "Address must be specified");
+            }
+
+            return new Pet(id, name.Trim(), speciesBreed, ownerPhoneNumber, address);
         }
 
         public UnitResult<Error> SetPhysicalInfo(string color, double weight, double height)
@@ -100,8 +107,6 @@ namespace Tails.Domain.Pets
         }
 
         public void UpdateDescription(string description) => Description = description;
-
-        public void SetAddress(string address) => Address = address;
 
         public void ChangeStatus(PetStatus status) => Status = status;
 

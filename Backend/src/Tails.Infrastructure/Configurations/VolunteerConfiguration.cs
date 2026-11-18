@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tails.Domain.Shared;
 using Tails.Domain.Volunteers;
 
 namespace Tails.Infrastructure.Configurations
 {
-    public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>           
+    public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
     {
         public void Configure(EntityTypeBuilder<Volunteer> builder)
         {
@@ -17,7 +18,13 @@ namespace Tails.Infrastructure.Configurations
 
             builder.Property(v => v.FullName).IsRequired().HasMaxLength(200).HasColumnName("full_name");
             builder.Property(v => v.Email).IsRequired().HasMaxLength(200).HasColumnName("email");
-            builder.Property(v => v.PhoneNumber).IsRequired().HasMaxLength(30).HasColumnName("phone_number");
+
+            builder.Property(v => v.PhoneNumber)
+                .HasConversion(v => v.Value, v => PhoneNumber.Create(v).Value)
+                .IsRequired()
+                .HasMaxLength(PhoneNumber.MaxLength)
+                .HasColumnName("phone_number");
+
             builder.Property(v => v.Description).HasMaxLength(2000).HasColumnName("description");
             builder.Property(v => v.ExperienceYears).HasColumnName("experience_years");
 

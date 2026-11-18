@@ -14,7 +14,7 @@ namespace Tails.Infrastructure.Configurations
             builder.ToTable("species");
             builder.HasKey(s => s.Id);
             builder.Property(s => s.Id).HasColumnName("id");
-            builder.Property(s => s.Name).IsRequired().HasMaxLength(100).HasColumnName("name");
+            builder.Property(b => b.Name).IsRequired().HasMaxLength(Breed.MaxNameLength).HasColumnName("name");
 
             builder.HasMany(s => s.Breeds)
                 .WithOne()

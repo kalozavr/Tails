@@ -12,7 +12,7 @@ public class Volunteer : Entity<Guid>
 
     public string FullName { get; private set; }
     public string Email { get; private set; }
-    public string PhoneNumber { get; private set; }
+    public PhoneNumber PhoneNumber { get; private set; }
     public string Description { get; private set; } = string.Empty;
     public int ExperienceYears { get; private set; }
 
@@ -20,7 +20,7 @@ public class Volunteer : Entity<Guid>
     public IReadOnlyList<Requisite> Requisites => _requisites;
     public IReadOnlyList<Pet> Pets => _pets;
 
-    private Volunteer(Guid id, string fullName, string email, string phoneNumber, int experienceYears)
+    private Volunteer(Guid id, string fullName, string email, PhoneNumber phoneNumber, int experienceYears)
         : base(id)
     {
         FullName = fullName;
@@ -30,7 +30,7 @@ public class Volunteer : Entity<Guid>
     }
 
     public static Result<Volunteer, Error> Create(
-        Guid id, string fullName, string email, string phoneNumber, int experienceYears)
+        Guid id, string fullName, string email, PhoneNumber phoneNumber, int experienceYears)
     {
         if (string.IsNullOrWhiteSpace(fullName))
             return new Error("volunteer.fullname.empty", "Full name cannot be empty");
@@ -38,13 +38,13 @@ public class Volunteer : Entity<Guid>
         if (string.IsNullOrWhiteSpace(email) || !email.Contains('@'))
             return new Error("volunteer.email.invalid", "Email is invalid");
 
-        if (string.IsNullOrWhiteSpace(phoneNumber))
+        if (phoneNumber is null || string.IsNullOrWhiteSpace(phoneNumber.Value))
             return new Error("volunteer.phone.empty", "Phone number cannot be empty");
 
         if (experienceYears < 0)
             return new Error("volunteer.experience.negative", "Experience cannot be negative");
 
-        return new Volunteer(id, fullName.Trim(), email.Trim(), phoneNumber.Trim(), experienceYears);
+        return new Volunteer(id, fullName.Trim(), email.Trim(), phoneNumber, experienceYears);
     }
 
     // The three counting methods: take a list of pets, count by status
