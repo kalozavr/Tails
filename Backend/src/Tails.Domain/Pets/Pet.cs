@@ -49,22 +49,22 @@ namespace Tails.Domain.Pets
         {
             if (string.IsNullOrWhiteSpace(name) || name.Trim().Length > MaxNameLength)
             {
-                return new Error("pet.name.invalid", $"Pet name is required (max {MaxNameLength} characters)");
+                return Error.Validation("pet.name.invalid", $"Pet name is required (max {MaxNameLength} characters)");
             }
 
             if (speciesBreed is null)
             {
-                return new Error("pet.speciesbreed.null", "Species and breed must be specified");
+                return Error.Validation("pet.speciesbreed.null", "Species and breed must be specified");
             }
 
             if (ownerPhoneNumber is null)
             {
-                return new Error("pet.phone.null", "Owner phone number must be specified");
+                return Error.Validation("pet.phone.null", "Owner phone number must be specified");
             }
 
             if (address is null)
             {
-                return new Error("pet.address.null", "Address must be specified");
+                return Error.Validation("pet.address.null", "Address must be specified");
             }
 
             return new Pet(id, name.Trim(), speciesBreed, ownerPhoneNumber, address);
@@ -74,12 +74,12 @@ namespace Tails.Domain.Pets
         {
             if (weight <= 0)
             {
-                return new Error("pet.weight.invalid", "Weight must be greater than zero");
+                return Error.Validation("pet.weight.invalid", "Weight must be greater than zero");
             }
 
             if (height <= 0)
             {
-                return new Error("pet.height.invalid", "Height must be greater than zero");
+                return Error.Validation("pet.height.invalid", "Height must be greater than zero");
             }
 
             Color = color;
@@ -92,7 +92,7 @@ namespace Tails.Domain.Pets
         {
             if (dateOfBirth > DateTime.UtcNow)
             {
-                return new Error("pet.birthdate.future", "Date of birth cannot be in the future");
+                return Error.Validation("pet.birthdate.future", "Date of birth cannot be in the future");
             }
 
             DateOfBirth = dateOfBirth;
@@ -114,12 +114,12 @@ namespace Tails.Domain.Pets
         {
             if (requisite is null)
             {
-                return new Error("pet.requisite.null", "Requisite cannot be null");
+                return Error.Validation("pet.requisite.null", "Requisite cannot be null");
             }
 
             if (_requisites.Contains(requisite))
             {
-                return new Error("pet.requisite.duplicate", "This requisite was already added");
+                return Error.Validation("pet.requisite.duplicate", "This requisite was already added");
             }
 
             _requisites.Add(requisite);

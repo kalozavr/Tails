@@ -21,12 +21,12 @@ public class SpeciesBreed : ValueObject
     {
         if (speciesId == Guid.Empty)
         {
-            return new Error("pet.species.empty", "Species id cannot be empty");
+            return Error.Validation("pet.species.empty", "Species id cannot be empty");
         }
 
         if (breedId == Guid.Empty)
         {
-            return new Error("pet.breed.empty", "Breed id cannot be empty");
+            return Error.Validation("pet.breed.empty", "Breed id cannot be empty");
         }
 
         return new SpeciesBreed(speciesId, breedId);

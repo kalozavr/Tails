@@ -25,13 +25,13 @@ public class Address : ValueObject
     public static Result<Address, Error> Create(string city, string street, string house)
     {
         if (string.IsNullOrWhiteSpace(city) || city.Trim().Length > MaxCityLength)
-            return new Error("address.city.invalid", $"City is required (max {MaxCityLength} characters)");
+            return Error.Validation("address.city.invalid", $"City is required (max {MaxCityLength} characters)");
 
         if (string.IsNullOrWhiteSpace(street) || street.Trim().Length > MaxStreetLength)
-            return new Error("address.street.invalid", $"Street is required (max {MaxStreetLength} characters)");
+            return Error.Validation("address.street.invalid", $"Street is required (max {MaxStreetLength} characters)");
 
         if (string.IsNullOrWhiteSpace(house) || house.Trim().Length > MaxHouseLength)
-            return new Error("address.house.invalid", $"House is required (max {MaxHouseLength} characters)");
+            return Error.Validation("address.house.invalid", $"House is required (max {MaxHouseLength} characters)");
 
         return new Address(city.Trim(), street.Trim(), house.Trim());
     }

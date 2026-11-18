@@ -20,10 +20,10 @@ public class Requisite : ValueObject
     public static Result<Requisite, Error> Create(string name, string description)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return new Error("requisite.name.empty", "Requisite name cannot be empty");
+            return Error.Validation("requisite.name.empty", "Requisite name cannot be empty");
 
         if (string.IsNullOrWhiteSpace(description))
-            return new Error("requisite.description.empty", "Requisite description cannot be empty");
+            return Error.Validation("requisite.description.empty", "Requisite description cannot be empty");
 
         return new Requisite(name.Trim(), description.Trim());
     }

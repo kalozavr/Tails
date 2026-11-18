@@ -15,13 +15,13 @@ public class PhoneNumber : ValueObject
     public static Result<PhoneNumber, Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            return new Error("phone.empty", "Phone number cannot be empty");
+            return Error.Validation("phone.empty", "Phone number cannot be empty");
 
         var normalized = value.Replace(" ", "").Replace("-", "");
         var digits = normalized.StartsWith('+') ? normalized[1..] : normalized;
 
         if (digits.Length < MinDigits || digits.Length > MaxDigits || !digits.All(char.IsDigit))
-            return new Error("phone.invalid", "Phone number format is invalid");
+            return Error.Validation("phone.invalid", "Phone number format is invalid");
 
         return new PhoneNumber(normalized);
     }

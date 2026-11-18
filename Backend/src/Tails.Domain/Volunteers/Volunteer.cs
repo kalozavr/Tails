@@ -33,16 +33,16 @@ public class Volunteer : Entity<Guid>
         Guid id, string fullName, string email, PhoneNumber phoneNumber, int experienceYears)
     {
         if (string.IsNullOrWhiteSpace(fullName))
-            return new Error("volunteer.fullname.empty", "Full name cannot be empty");
+            return Error.Validation("volunteer.fullname.empty", "Full name cannot be empty");
 
         if (string.IsNullOrWhiteSpace(email) || !email.Contains('@'))
-            return new Error("volunteer.email.invalid", "Email is invalid");
+            return Error.Validation("volunteer.email.invalid", "Email is invalid");
 
         if (phoneNumber is null || string.IsNullOrWhiteSpace(phoneNumber.Value))
-            return new Error("volunteer.phone.empty", "Phone number cannot be empty");
+            return Error.Validation("volunteer.phone.empty", "Phone number cannot be empty");
 
         if (experienceYears < 0)
-            return new Error("volunteer.experience.negative", "Experience cannot be negative");
+            return Error.Validation("volunteer.experience.negative", "Experience cannot be negative");
 
         return new Volunteer(id, fullName.Trim(), email.Trim(), phoneNumber, experienceYears);
     }
@@ -62,10 +62,10 @@ public class Volunteer : Entity<Guid>
     public UnitResult<Error> AddSocialNetwork(SocialNetwork socialNetwork)
     {
         if (socialNetwork is null)
-            return new Error("volunteer.socialnetwork.null", "Social network cannot be null");
+            return Error.Validation("volunteer.socialnetwork.null", "Social network cannot be null");
 
         if (_socialNetworks.Contains(socialNetwork))
-            return new Error("volunteer.socialnetwork.duplicate", "This social network was already added");
+            return Error.Validation("volunteer.socialnetwork.duplicate", "This social network was already added");
 
         _socialNetworks.Add(socialNetwork);
         return UnitResult.Success<Error>();
@@ -74,10 +74,10 @@ public class Volunteer : Entity<Guid>
     public UnitResult<Error> AddRequisite(Requisite requisite)
     {
         if (requisite is null)
-            return new Error("volunteer.requisite.null", "Requisite cannot be null");
+            return Error.Validation("volunteer.requisite.null", "Requisite cannot be null");
 
         if (_requisites.Contains(requisite))
-            return new Error("volunteer.requisite.duplicate", "This requisite was already added");
+            return Error.Validation("volunteer.requisite.duplicate", "This requisite was already added");
 
         _requisites.Add(requisite);
         return UnitResult.Success<Error>();
@@ -86,10 +86,10 @@ public class Volunteer : Entity<Guid>
     public UnitResult<Error> AddPet(Pet pet)
     {
         if (pet is null)
-            return new Error("volunteer.pet.null", "Pet cannot be null");
+            return Error.Validation("volunteer.pet.null", "Pet cannot be null");
 
         if (_pets.Any(p => p.Id == pet.Id))
-            return new Error("volunteer.pet.duplicate", "This pet was already added");
+            return Error.Validation("volunteer.pet.duplicate", "This pet was already added");
 
         _pets.Add(pet);
         return UnitResult.Success<Error>();

@@ -15,7 +15,7 @@ public class Breed : Entity<Guid>
     public static Result<Breed, Error> Create(Guid id, string name)
     {
         if (string.IsNullOrWhiteSpace(name) || name.Trim().Length > MaxNameLength)
-            return new Error("breed.name.invalid", $"Breed name is required (max {MaxNameLength} characters)");
+            return Error.Validation("breed.name.invalid", $"Breed name is required (max {MaxNameLength} characters)");
 
         return new Breed(id, name.Trim());
     }

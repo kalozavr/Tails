@@ -19,10 +19,10 @@ public class SocialNetwork : ValueObject
     public static Result<SocialNetwork, Error> Create(string name, string link)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return new Error("socialnetwork.name.empty", "Social network name cannot be empty");
+            return Error.Validation("socialnetwork.name.empty", "Social network name cannot be empty");
 
         if (string.IsNullOrWhiteSpace(link))
-            return new Error("socialnetwork.link.empty", "Social network link cannot be empty");
+            return Error.Validation("socialnetwork.link.empty", "Social network link cannot be empty");
 
         return new SocialNetwork(name.Trim(), link.Trim());
     }
