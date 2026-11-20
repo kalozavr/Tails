@@ -6,11 +6,23 @@ services:
     environment:
       POSTGRES_DB: tails
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Ilia@005
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+
+  seq:
+    container_name: seq
+    image: datalust/seq:latest
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+    ports:
+      - "5341:80"
+      - "5342:5341"
+    volumes:
+      - ./seq-data:/data
 
 volumes:
   postgres-data:
